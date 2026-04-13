@@ -19,9 +19,13 @@
             <nav class="nav flex-column gap-2 mt-4">
                 <a class="eduflow-link" href="{% url 'dashboard_home' %}">Dashboard</a>
                 <a class="eduflow-link" href="{% url 'student_list' %}">Students</a>
+                {% if request.user.is_superuser or request.user.role == 'admin' or request.user.role == 'staff' %}
                 <a class="eduflow-link" href="{% url 'student_create' %}">Add Student</a>
+                {% endif %}
                 <a class="eduflow-link" href="/api/docs/">API Docs</a>
+                {% if request.user.is_superuser or request.user.role == 'admin' %}
                 <a class="eduflow-link" href="/admin/">Admin</a>
+                {% endif %}
             </nav>
         </aside>
 
@@ -31,7 +35,10 @@
                 <div>
                     {% if request.user.is_authenticated %}
                         <span class="badge text-bg-light">{{ request.user.username }} | {{ request.user.role|default:'viewer' }}</span>
-                        <a class="btn btn-sm btn-danger ms-2" href="{% url 'logout' %}">Logout</a>
+                        <form method="post" action="{% url 'logout' %}" class="d-inline ms-2">
+                            {% csrf_token %}
+                            <button class="btn btn-sm btn-danger" type="submit">Logout</button>
+                        </form>
                     {% endif %}
                 </div>
             </header>
