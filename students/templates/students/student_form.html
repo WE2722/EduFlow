@@ -1,0 +1,17 @@
+{% extends 'students/base.html' %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h2 class="h4 mb-3">{{ title }} un etudiant</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary" type="submit">Enregistrer</button>
+                <a class="btn btn-secondary" href="{% url 'student_list' %}">Retour</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

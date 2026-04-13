@@ -1,0 +1,117 @@
+{% extends 'students/base.html' %}
+
+{% block content %}
+<div class="eduflow-card mb-4">
+    <div class="card-body p-4">
+        <form method="get" class="row g-2 position-relative">
+            <div class="col-md-4 position-relative">
+                <input id="smart-search" type="text" name="q" class="form-control" placeholder="Smart search (nom, prenom, email, phone)" value="{{ query }}" autocomplete="off">
+                <div id="search-results" class="list-group position-absolute w-100 mt-1 shadow-sm d-none" style="z-index: 1000;"></div>
+            </div>
+            <div class="col-md-3">
+                <select name="filiere" class="form-select">
+                    <option value="">Toutes les filieres</option>
+                    {% for f in filieres %}
+                        <option value="{{ f.id }}" {% if filiere == f.id|stringformat:'s' %}selected{% endif %}>{{ f.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="status" class="form-select">
+                    <option value="">Tous les statuts</option>
+                    {% for value, label in status_choices %}
+                        <option value="{{ value }}" {% if status == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2 d-grid">
+                <button class="btn btn-primary" type="submit">Filtrer</button>
+            </div>
+        </form>
+        <div class="mt-3 d-flex flex-wrap gap-2">
+            <a class="btn btn-success" href="{% url 'student_create' %}">Ajouter un etudiant</a>
+            <a class="btn btn-outline-dark" href="{% url 'export_students_csv' %}?q={{ query }}&filiere={{ filiere }}&status={{ status }}">Exporter CSV</a>
+            <span class="badge text-bg-secondary align-self-center">Total: {{ total_students }}</span>
+        </div>
+    </div>
+</div>
+
+<div class="eduflow-card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-striped mb-0 align-middle">
+                <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>Nom complet</th>
+                        <th>Email</th>
+                        <th>Filiere</th>
+                        <th>Statut</th>
+                        <th>Inscription</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in page_obj %}
+                        <tr>
+                            <td>
+                                {% if student.photo %}
+                                    <img src="{{ student.photo.url }}" alt="photo" width="50" height="50" class="rounded-circle object-fit-cover">
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ student.last_name }} {{ student.first_name }}</td>
+                            <td>{{ student.email }}</td>
+                            <td>{{ student.filiere.name }}</td>
+                            <td>
+                                {% if student.status == 'actif' %}
+                                    <span class="badge text-bg-success">Actif</span>
+                                {% elif student.status == 'suspendu' %}
+                                    <span class="badge text-bg-warning">Suspendu</span>
+                                {% else %}
+                                    <span class="badge text-bg-primary">Diplome</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ student.date_inscription|date:'d/m/Y' }}</td>
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-outline-info" href="{% url 'student_detail' student.pk %}">Voir</a>
+                                <a class="btn btn-sm btn-outline-primary" href="{% url 'student_update' student.pk %}">Modifier</a>
+                                <a class="btn btn-sm btn-outline-danger" href="{% url 'student_delete' student.pk %}">Supprimer</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center p-4 text-muted">Aucun etudiant trouve.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% if page_obj.paginator.num_pages > 1 %}
+<nav class="mt-3" aria-label="Pagination">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}&q={{ query }}&filiere={{ filiere }}&status={{ status }}">Precedent</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">Precedent</span></li>
+        {% endif %}
+
+        <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}&q={{ query }}&filiere={{ filiere }}&status={{ status }}">Suivant</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">Suivant</span></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

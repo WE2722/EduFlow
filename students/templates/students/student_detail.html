@@ -1,0 +1,33 @@
+{% extends 'students/base.html' %}
+
+{% block content %}
+<div class="eduflow-card">
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-3">
+                {% if student.photo %}
+                    <img src="{{ student.photo.url }}" alt="photo" class="img-fluid rounded border">
+                {% else %}
+                    <div class="border rounded p-4 text-center text-muted">Aucune photo</div>
+                {% endif %}
+            </div>
+            <div class="col-md-9">
+                <h2 class="h4">{{ student.last_name }} {{ student.first_name }}</h2>
+                <p class="mb-1"><strong>Email:</strong> {{ student.email }}</p>
+                <p class="mb-1"><strong>Telephone:</strong> {{ student.phone|default:'-' }}</p>
+                <p class="mb-1"><strong>Filiere:</strong> {{ student.filiere.name }}</p>
+                <p class="mb-1"><strong>Statut:</strong> {{ student.get_status_display }}</p>
+                <p class="mb-0"><strong>Inscription:</strong> {{ student.date_inscription|date:'d/m/Y H:i' }}</p>
+                <hr>
+                <p class="mb-1"><strong>Created by:</strong> {{ student.created_by|default:'-' }}</p>
+                <p class="mb-0"><strong>Updated by:</strong> {{ student.updated_by|default:'-' }}</p>
+            </div>
+        </div>
+        <div class="mt-4 d-flex gap-2">
+            <a class="btn btn-primary" href="{% url 'student_update' student.pk %}">Modifier</a>
+            <a class="btn btn-danger" href="{% url 'student_delete' student.pk %}">Supprimer</a>
+            <a class="btn btn-secondary" href="{% url 'student_list' %}">Retour</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'students/base.html' %}
+
+{% block content %}
+<div class="card border-danger shadow-sm">
+    <div class="card-body">
+        <h2 class="h4 text-danger">Confirmer la suppression</h2>
+        <p>Voulez-vous vraiment supprimer <strong>{{ student.last_name }} {{ student.first_name }}</strong> ?</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="d-flex gap-2">
+                <button class="btn btn-danger" type="submit">Supprimer</button>
+                <a class="btn btn-secondary" href="{% url 'student_list' %}">Annuler</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

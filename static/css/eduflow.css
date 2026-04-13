@@ -1,0 +1,75 @@
+body {
+    margin: 0;
+    font-family: 'Manrope', sans-serif;
+    background: radial-gradient(circle at top right, #dbeafe, #eef2ff 45%, #f8fafc);
+    color: #0f172a;
+}
+
+.eduflow-app {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: 100vh;
+}
+
+.eduflow-sidebar {
+    background: linear-gradient(180deg, #0f172a, #1e293b);
+    color: #fff;
+    padding: 24px;
+}
+
+.logo {
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    margin-bottom: 0;
+}
+
+.logo-subtitle {
+    margin: 0;
+    color: #bfdbfe;
+    font-size: 0.9rem;
+}
+
+.eduflow-link {
+    color: #cbd5e1;
+    text-decoration: none;
+    padding: 10px 12px;
+    border-radius: 10px;
+}
+
+.eduflow-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.eduflow-main {
+    padding: 20px;
+}
+
+.eduflow-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+}
+
+.eduflow-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 6px 24px rgba(15, 23, 42, 0.08);
+}
+
+@media (max-width: 900px) {
+    .eduflow-app {
+        grid-template-columns: 1fr;
+    }
+
+    .eduflow-sidebar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+    }
+}
